@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{562518f8-1972-ed11-9562-000d3a55f956}</WebResourceId>
+  <Name>erf_cloudflowincidententityimage</Name>
+  <DisplayName>Cloud Flow Incident Entity Image</DisplayName>
+  <WebResourceType>11</WebResourceType>
+  <IntroducedVersion>1.0.0.19</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/erf_cloudflowincidententityimage562518F8-1972-ED11-9562-000D3A55F956</FileName>
+</WebResource>

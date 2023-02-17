@@ -1,0 +1,261 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverseEnvRequest"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreO365Outlook"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Admin eMail (admin_AdminMail)": {
+          "defaultValue": "eromerof@dynamicsbox.es",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_AdminMail",
+            "description": "CoE Admin eMail. Email address used in flows to send notifications to admins; this should be either your email address or a distribution list"
+          }
+        },
+        "Production Environment ID (erf_ProductionEnvironmentID)": {
+          "defaultValue": "ac79739f-e02e-43b3-92db-507f2d68e125",
+          "type": "String",
+          "metadata": {
+            "schemaName": "erf_ProductionEnvironmentID",
+            "description": "Environment ID for monitoring cloud flows"
+          }
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Hour",
+            "interval": 3,
+            "startTime": "2022-04-29T05:15:00Z"
+          },
+          "metadata": {
+            "operationMetadataId": "9675f3cf-591d-4409-80d0-ed9769ebe61f"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "Get_Started_CloudFlows": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "1081750e-cff7-4fe6-8a53-9f860fcfdb2b"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cat_cloudflowrunses",
+              "$select": "erf_executionurl,cat_status,cat_starttime,cat_endtime,cat_cloudflowrunsid,erf_flowexecutiondescription",
+              "$filter": "(cat_status eq 'Failed' and erf_notified eq false) and (cat_Flow/admin_flowstate eq 'Started' and cat_Flow/admin_flowenvironmentid eq '@{parameters('Production Environment ID (erf_ProductionEnvironmentID)')}')",
+              "$orderby": "cat_starttime desc",
+              "$expand": "cat_Flow($select=admin_flowenvironmentid,admin_flowstate,admin_displayname)"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "IfAllIsPerfect": {
+          "actions": {
+            "Finalizar": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "95dc20dc-f869-4b40-8da8-9b2dec71c512"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              }
+            }
+          },
+          "runAfter": {
+            "Inicializar_variable_Power_Automate_URL": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "equals": [
+              "@first(outputs('Get_Started_CloudFlows')?['body/value'])",
+              "@null"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "43bd19c9-436d-441e-b583-5711b594b96e"
+          },
+          "type": "If"
+        },
+        "CreateHTMLToSendEmail": {
+          "runAfter": {
+            "IfAllIsPerfect": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "c83709f4-ff4a-4296-beb2-f0d427d42a02"
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@outputs('Get_Started_CloudFlows')?['body/value']",
+            "format": "HTML",
+            "columns": [
+              {
+                "header": "FlowName",
+                "value": "@item()?['cat_flow/admin_displayname']"
+              },
+              {
+                "header": "DetailedError",
+                "value": "@item()?['erf_flowexecutiondescription']"
+              },
+              {
+                "header": "StartTime",
+                "value": "@item()?['cat_starttime']"
+              },
+              {
+                "header": "EndTime",
+                "value": "@item()?['cat_endtime']"
+              },
+              {
+                "header": "URL",
+                "value": "@concat('<a href=\"',variables('PowerAutomateURL'),item()?['erf_executionurl'],'\">','Link to Power Automate Execution','</a>')"
+              }
+            ]
+          }
+        },
+        "Enviar_correo_electrónico_(V2)": {
+          "runAfter": {
+            "Email_CSS": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "c958b55a-ea60-4696-b69b-0fe6bf0d74e0"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+            },
+            "parameters": {
+              "emailMessage/To": "@parameters('Admin eMail (admin_AdminMail)')",
+              "emailMessage/Subject": "We have errors in the flows",
+              "emailMessage/Body": "@{outputs('Email_CSS')}\n@{outputs('Redactar')}",
+              "emailMessage/Importance": "Normal"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Inicializar_variable_Power_Automate_URL": {
+          "runAfter": {
+            "Get_Started_CloudFlows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "98bae16c-8586-40b5-8300-dd8a096acbb0"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PowerAutomateURL",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Redactar": {
+          "runAfter": {
+            "CreateHTMLToSendEmail": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e35b085c-00d0-4458-8137-8e2321ef51cd"
+          },
+          "type": "Compose",
+          "inputs": "@replace(replace(replace(body('CreateHTMLToSendEmail'),'&lt;','<'),'&gt;','>'),'&quot;','\"')"
+        },
+        "Por_cada_ejecución": {
+          "foreach": "@outputs('Get_Started_CloudFlows')?['body/value']",
+          "actions": {
+            "Marcamos_como_que_ha_sido_notificado": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "af5aa73c-3eb2-4b06-98f1-3f2845075a5e"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cat_cloudflowrunses",
+                  "recordId": "@items('Por_cada_ejecución')?['cat_cloudflowrunsid']",
+                  "item/erf_notified": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Enviar_correo_electrónico_(V2)": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "921f4669-d56c-4840-8866-57ff3a86f936"
+          },
+          "type": "Foreach"
+        },
+        "Email_CSS": {
+          "runAfter": {
+            "Redactar": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "d9bc354f-ed6d-4e56-b6e5-95fc99ff340a"
+          },
+          "type": "Compose",
+          "inputs": "<style type=\"text/css\" media=\"screen\">\ntable {\n  border: 1px solid #FFFFFF;\n  width: 350px;\n  height: 200px;\n  text-align: center;\n  border-collapse: collapse;\n}\ntd, th {\n  border: 1px solid #FFFFFF;\n  padding: 3px 2px;\n}\ntbody td {\n  font-size: 13px;\n}\ntr:nth-child(even) {\n  background: #D0E4F5;\n}\nthead {\n  background: #0B6FA4;\n  border-bottom: 5px solid #FFFFFF;\n}\nthead th {\n  font-size: 17px;\n  font-weight: bold;\n  color: #FFFFFF;\n  text-align: center;\n  border-left: 2px solid #FFFFFF;\n}\nthead th:first-child {\n  border-left: none;\n}\n\ntfoot {\n  font-size: 14px;\n  font-weight: bold;\n  color: #333333;\n  background: #D0E4F5;\n  border-top: 3px solid #444444;\n}\ntfoot td {\n  font-size: 14px;\n}\n</style>"
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

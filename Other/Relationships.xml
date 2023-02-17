@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_erf_cloudflowincident" />
+  <EntityRelationship Name="cat_CloudFlowRuns_Flow_admin_Flow" />
+  <EntityRelationship Name="erf_admin_flow_Usertoassignincidents_admin_ma" />
+  <EntityRelationship Name="erf_CloudFlowIncident_erf_CloudFlowIncide" />
+  <EntityRelationship Name="erf_erf_cloudflowincident_cloudflowid_cat_clo" />
+  <EntityRelationship Name="erf_erf_cloudflowincident_makerid_admin_maker" />
+  <EntityRelationship Name="lk_erf_cloudflowincident_createdby" />
+  <EntityRelationship Name="lk_erf_cloudflowincident_modifiedby" />
+  <EntityRelationship Name="owner_erf_cloudflowincident" />
+  <EntityRelationship Name="team_erf_cloudflowincident" />
+  <EntityRelationship Name="user_erf_cloudflowincident" />
+</EntityRelationships>

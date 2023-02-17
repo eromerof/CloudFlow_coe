@@ -1,0 +1,384 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverseEnvRequest"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreO365Outlook"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      },
+      "shared_flowmanagement": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECorePowerAutomateManagement"
+        },
+        "api": {
+          "name": "shared_flowmanagement"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Admin eMail (admin_AdminMail)": {
+          "defaultValue": "eromerof@dynamicsbox.es",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_AdminMail",
+            "description": "CoE Admin eMail. Email address used in flows to send notifications to admins; this should be either your email address or a distribution list"
+          }
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        },
+        "Production Environment ID (erf_ProductionEnvironmentID)": {
+          "defaultValue": "ac79739f-e02e-43b3-92db-507f2d68e125",
+          "type": "String",
+          "metadata": {
+            "schemaName": "erf_ProductionEnvironmentID",
+            "description": "Environment ID for monitoring cloud flows"
+          }
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "startTime": "2022-04-29T05:00:00Z"
+          },
+          "metadata": {
+            "operationMetadataId": "cf79ec98-a487-467d-8a7a-ac762c1ca71a"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "Get_Stopped_CloudFlows": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "5ac15ffd-1907-4571-bb31-49c22726c0c6"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "admin_flows",
+              "$select": "admin_displayname,admin_flowenvironmentid,admin_flowidstring, erf_forceactivateifstopped",
+              "$filter": "(admin_flowdeleted eq false and admin_flowstate eq 'Stopped' and admin_flowenvironmentid eq '@{parameters('Production Environment ID (erf_ProductionEnvironmentID)')}'  and erf_monitoringexecution eq true)",
+              "$expand": "owninguser($select=internalemailaddress)"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "If_not_have_stopped_CloudFlows": {
+          "actions": {
+            "Finalizar": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "1738e360-0276-4cff-aaa2-d9ebf04d1e19"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_Power_Automate_URL": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "equals": [
+              "@first(outputs('Get_Stopped_CloudFlows')?['body/value'])",
+              "@null"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9fc1cfc8-44da-48b2-91b8-ee0bae5b11d4"
+          },
+          "type": "If"
+        },
+        "CreateHTMLToSendEmail": {
+          "runAfter": {
+            "Por_cada_flujo_inactivo": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "501aa9bc-fb3f-4594-9c04-d0349358a139"
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@outputs('Get_Stopped_CloudFlows')?['body/value']",
+            "format": "HTML",
+            "columns": [
+              {
+                "header": "Name",
+                "value": "@item()?['admin_displayname']"
+              },
+              {
+                "header": "URL",
+                "value": "@concat('<a href=\"',variables('PowerAutomateURL'),item()?['admin_flowenvironmentid'],'/flows/',item()?['admin_flowidstring'],'/details','\">','Link to Power Automate','</a>')"
+              }
+            ]
+          }
+        },
+        "Enviar_correo_electrónico_(V2)": {
+          "runAfter": {
+            "Compose": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "96391620-827e-40ec-a9fb-0a87296e28e3"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+            },
+            "parameters": {
+              "emailMessage/To": "@{parameters('Admin eMail (admin_AdminMail)')};@{variables('ResponsiblesEmails')}",
+              "emailMessage/Subject": "Attention! Flows stopped in the environment",
+              "emailMessage/Body": "@{outputs('Redactar')}\n</br>\n</br>\n<b>Además hemos encontrado los siguientes errores al activar los flujos</b>\n@{outputs('Compose')}",
+              "emailMessage/Importance": "High"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Redactar": {
+          "runAfter": {
+            "CreateHTMLFromErrors": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "cb0b959d-c77e-46e6-8262-beb7e0b72fcb"
+          },
+          "type": "Compose",
+          "inputs": "@replace(replace(replace(body('CreateHTMLToSendEmail'),'&lt;','<'),'&gt;','>'),'&quot;','\"')"
+        },
+        "Initialize_Power_Automate_URL": {
+          "runAfter": {
+            "Initialize_ResponsibleEmails": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9d180ae6-5f8e-46a9-b647-73eb55938d13"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PowerAutomateURL",
+                "type": "string",
+                "value": "@parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)')"
+              }
+            ]
+          }
+        },
+        "Por_cada_flujo_inactivo": {
+          "foreach": "@outputs('Get_Stopped_CloudFlows')?['body/value']",
+          "actions": {
+            "If_force_activated_is_enabled": {
+              "actions": {
+                "Try": {
+                  "actions": {
+                    "Turn_On_Flow": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "9e3e8264-3dbd-4fbe-8701-58462c2cccb0"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_flowmanagement",
+                          "operationId": "StartFlow",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_flowmanagement"
+                        },
+                        "parameters": {
+                          "environmentName": "@items('Por_cada_flujo_inactivo')?['admin_flowenvironmentid']",
+                          "flowName": "@items('Por_cada_flujo_inactivo')?['admin_flowidstring']"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    }
+                  },
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "93c08aa7-19a4-4915-81dc-ff95f89d92e6"
+                  },
+                  "type": "Scope"
+                },
+                "Catch": {
+                  "actions": {
+                    "Add_Error_to_variable_errors": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "0577bb36-6c33-4c2c-bec6-c3a440da77ce"
+                      },
+                      "type": "AppendToArrayVariable",
+                      "inputs": {
+                        "name": "ForcedActivatedFlows",
+                        "value": {
+                          "flowName": "@{items('Por_cada_flujo_inactivo')?['admin_displayname']}",
+                          "error": "@{outputs('Turn_On_Flow')?['body']}"
+                        }
+                      }
+                    },
+                    "Add_Internal_Email": {
+                      "runAfter": {
+                        "Add_Error_to_variable_errors": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "fdbb0c71-d515-4c39-bca9-e85a47840a54"
+                      },
+                      "type": "AppendToStringVariable",
+                      "inputs": {
+                        "name": "ResponsiblesEmails",
+                        "value": "@{items('Por_cada_flujo_inactivo')?['owninguser/internalemailaddress']};"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Try": [
+                      "Failed"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "30ab0098-ca9e-43e7-a9cc-e1a2e05a453c"
+                  },
+                  "type": "Scope"
+                }
+              },
+              "runAfter": {},
+              "expression": {
+                "equals": [
+                  "@items('Por_cada_flujo_inactivo')?['erf_forceactivateifstopped']",
+                  "@true"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c2d2aa3c-bd5e-46ae-a0c7-c893c2840b33"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "04763dd1-16da-4675-88e9-1c9789f05b3d"
+          },
+          "type": "Foreach"
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "If_not_have_stopped_CloudFlows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "458e3394-8e93-47c6-85e2-c8716ba3d80c"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ForcedActivatedFlows",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "CreateHTMLFromErrors": {
+          "runAfter": {
+            "CreateHTMLToSendEmail": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "273f8c5f-7860-4294-a3cb-2eade438ac1d"
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@variables('ForcedActivatedFlows')",
+            "format": "HTML"
+          }
+        },
+        "Compose": {
+          "runAfter": {
+            "Redactar": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9b687549-f4ec-43f0-b1f3-e6b6464eadd0"
+          },
+          "type": "Compose",
+          "inputs": "@replace(replace(replace(body('CreateHTMLFromErrors'),'&lt;','<'),'&gt;','>'),'&quot;','\"')"
+        },
+        "Initialize_ResponsibleEmails": {
+          "runAfter": {
+            "Get_Stopped_CloudFlows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b3beb182-e064-4637-bc24-4ff7afabcf4b"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ResponsiblesEmails",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

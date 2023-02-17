@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{1e9a3577-99f5-477a-82fd-736255a3ff9d}</formid>
+    <IntroducedVersion>0.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="false" maxWidth="1920" headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{f7845e2d-adcd-4c20-9db7-50cc30d44955}" IsUserDefined="1" name="{f7845e2d-adcd-4c20-9db7-50cc30d44955}" locklevel="0" expanded="true" showlabel="true" ordinalvalue="0">
+          <columns>
+            <column width="50%" id="0">
+              <sections>
+                <section showlabel="true" showbar="true" IsUserDefined="0" id="{20ddf93c-be90-496c-a8cc-f7707ce9c3d8}" name="{20ddf93c-be90-496c-a8cc-f7707ce9c3d8}" columns="1" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{544b7956-658e-4127-b322-f09389b4e09c}" showlabel="true" locklevel="0" ordinalvalue="10005" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{12197a30-29d8-a7db-8ec5-94900b538103}" showlabel="true" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10004" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{9dbf1077-bb24-4f74-9a88-6d697657386b}" showlabel="true" locklevel="0" visible="false" ordinalvalue="10006" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{e74e6e48-da8a-48ee-a9c6-2cb4221e83aa}" showlabel="true" locklevel="1" visible="false" ordinalvalue="10007" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{e71eb02b-4cd8-422f-854e-f3b3d882ed6c}" locklevel="0" ordinalvalue="10009" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{ea5f345b-76ff-4428-b2f2-27b68a226284}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10010" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{c84ef50e-42f9-4c76-ab93-02af9b429a8e}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10002" solutionaction="Added">
+                        <labels>
+                          <label description="Monitoring Execution" languagecode="1033" />
+                        </labels>
+                        <control id="erf_monitoringexecution" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="erf_monitoringexecution" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6885f5b3-1d99-4358-bb8d-266e1ade4fad}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10003" solutionaction="Added">
+                        <labels>
+                          <label description="Force activate if stopped" languagecode="1033" />
+                        </labels>
+                        <control id="erf_forceactivateifstopped" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="erf_forceactivateifstopped" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{f93a1e40-4d7e-4f1b-9c09-9122d7ada39d}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10011" solutionaction="Added">
+                        <labels>
+                          <label description="User to assign incidents" languagecode="1033" />
+                        </labels>
+                        <control id="erf_usertoassignincidents" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="erf_usertoassignincidents" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_2" id="a8be0bc4-049a-4096-9024-5c398af2e6c0" IsUserDefined="0" locklevel="0" showlabel="true" ordinalvalue="1">
+          <columns>
+            <column width="50%" id="0">
+              <sections>
+                <section name="tab_2_section_4" id="343d9583-75d9-4ac0-869a-05e8ac06aef7" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell showlabel="false" locklevel="0" id="{b300c135-fc96-47c4-bbf0-b482b0f4ddfb}" ordinalvalue="10000" solutionaction="Removed" />
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{1965f97e-df40-454d-8a71-f12832e8dae5}" columns="111">
+        <rows>
+          <row>
+            <cell id="{1a71cc85-f75a-4ea2-934b-4c578c856a9b}" showlabel="false" ordinalvalue="10000" solutionaction="Removed" />
+            <cell id="{f2977b1e-283a-4477-9f87-8376bac23595}" showlabel="false" ordinalvalue="20001" solutionaction="Removed" />
+          </row>
+        </rows>
+      </header>
+      <footer id="{e4dc5103-a81e-4462-ad1f-c995996912a0}" columns="111">
+        <rows>
+          <row>
+            <cell id="{9fc727e3-cbcd-445f-b8b4-c83aff8c101c}" showlabel="false" ordinalvalue="10000" solutionaction="Removed" />
+            <cell id="{b61dea52-c7ca-4f56-8199-ec97703f4d7c}" showlabel="false" ordinalvalue="20001" solutionaction="Removed" />
+            <cell id="{7d442b28-b2fd-47a4-aed1-43fb394d0a67}" ordinalvalue="30002" solutionaction="Removed" />
+          </row>
+        </rows>
+      </footer>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Main Flow Form" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{253e3f15-19e7-45f9-9274-f3a44e86294f}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form headerdensity="HighWithControls" solutionaction="Modified">
+      <tabs>
+        <tab verticallayout="true" id="{4e91ef57-46be-4c9c-9a8f-e83f07d56d73}" IsUserDefined="1" ordinalvalue="0">
+          <columns>
+            <column width="100%" id="0">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{d3d45fdd-e99e-4035-b212-fc1e90be0554}" columns="11" ordinalvalue="0" solutionaction="Modified">
+                  <rows>
+                    <row>
+                      <cell id="{9efdb7ca-c822-49e8-9fa7-4ddabbde03e4}" ordinalvalue="10000">
+                        <control id="cat_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cat_name" disabled="true" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ff6221e3-ef9f-4861-9658-4d68cb682e7c}" ordinalvalue="10006" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{173c63b6-522e-4c06-ab31-f24b71986827}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="20001" solutionaction="Added">
+                        <labels>
+                          <label description="Flow" languagecode="1033" />
+                        </labels>
+                        <control id="cat_flow" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cat_flow" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0be74b58-be12-49dc-8564-599a48d117dc}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10002" solutionaction="Added">
+                        <labels>
+                          <label description="Start Time" languagecode="1033" />
+                        </labels>
+                        <control id="cat_starttime" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="cat_starttime" disabled="true" />
+                      </cell>
+                      <cell id="{60a173a3-30ce-4775-a283-92f869002b1f}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="20003" solutionaction="Added">
+                        <labels>
+                          <label description="End Time" languagecode="1033" />
+                        </labels>
+                        <control id="cat_endtime" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="cat_endtime" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0091bcd8-07b6-47d0-99e9-fe208803b3a2}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="10004" solutionaction="Added">
+                        <labels>
+                          <label description="Execution URL" languagecode="1033" />
+                        </labels>
+                        <control id="erf_executionurl" classid="{71716B6C-711E-476C-8AB8-5D11542BFB47}" datafieldname="erf_executionurl" disabled="true" />
+                      </cell>
+                      <cell id="{ab57097b-1b0d-486b-b8fa-8a38d0c8038d}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="20005" solutionaction="Added">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="cat_status" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="cat_status" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{da122e54-e452-4975-afb1-51f1c71a1b1e}" locklevel="0" colspan="1" rowspan="1" ordinalvalue="20007" solutionaction="Added">
+                        <labels>
+                          <label description="Duration (Minutes)" languagecode="1033" />
+                        </labels>
+                        <control id="erf_calculatedduration" classid="{C3EFE0C3-0EC6-42BE-8349-CBD9079DFD8E}" datafieldname="erf_calculatedduration" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d032160a-a2ee-4dd9-adbc-dc5b41eb94f2}" locklevel="0" colspan="2" rowspan="10" ordinalvalue="10008" solutionaction="Added">
+                        <labels>
+                          <label description="Flow execution description" languagecode="1033" />
+                        </labels>
+                        <control id="erf_flowexecutiondescription" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="erf_flowexecutiondescription" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{bdc173bf-b58f-48ba-b9fc-4dba30441451}" locklevel="0" colspan="1" rowspan="1" visible="false" ordinalvalue="10009" solutionaction="Added">
+                        <labels>
+                          <label description="Notificado" languagecode="1033" />
+                        </labels>
+                        <control id="erf_notified" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="erf_notified" disabled="false" />
+                      </cell>
+                      <cell locklevel="0" id="{1899da37-cfb6-4fd5-90bd-3752cd6766db}" ordinalvalue="20010" solutionaction="Added">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{1c379f72-ac3f-4759-981a-44653d1d39e2}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left" solutionaction="Added">
+        <rows />
+      </header>
+      <footer id="{3c8c988b-df4d-43bc-b6ea-20b6d75e56a4}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left" solutionaction="Added">
+        <rows />
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true" solutionaction="Added">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

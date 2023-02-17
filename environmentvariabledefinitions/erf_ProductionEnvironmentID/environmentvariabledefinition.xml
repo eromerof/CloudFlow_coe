@@ -1,0 +1,13 @@
+<environmentvariabledefinition schemaname="erf_ProductionEnvironmentID">
+  <description default="Environment ID for monitoring cloud flows">
+    <label description="Environment ID for monitoring cloud flows" languagecode="1033" />
+  </description>
+  <displayname default="Production Environment ID">
+    <label description="Production Environment ID" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.5</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

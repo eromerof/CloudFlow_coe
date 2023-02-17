@@ -1,0 +1,137 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_flowmanagement": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECorePowerAutomateManagement"
+        },
+        "api": {
+          "name": "shared_flowmanagement"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Preproduction Environment ID (erf_PreproductionEnvironmentID)": {
+          "defaultValue": "ac79739f-e02e-43b3-92db-507f2d68e125",
+          "type": "String",
+          "metadata": {
+            "schemaName": "erf_PreproductionEnvironmentID"
+          }
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "startTime": "2022-04-29T05:00:00Z"
+          },
+          "metadata": {
+            "operationMetadataId": "cf79ec98-a487-467d-8a7a-ac762c1ca71a"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "Get_Stopped_CloudFlows": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "5ac15ffd-1907-4571-bb31-49c22726c0c6"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "admin_flows",
+              "$select": "admin_displayname,admin_flowenvironmentid,admin_flowidstring, erf_forceactivateifstopped",
+              "$filter": "(admin_flowenvironmentid eq '@{parameters('Preproduction Environment ID (erf_PreproductionEnvironmentID)')}'  and erf_monitoringexecution eq true and erf_forceactivateifstopped eq true)",
+              "$expand": "owninguser($select=internalemailaddress)"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "ForEach_Inactive_Flow": {
+          "foreach": "@outputs('Get_Stopped_CloudFlows')?['body/value']",
+          "actions": {
+            "Try": {
+              "actions": {
+                "Turn_On_Flow": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "6537c90c-6a6a-4335-96d1-5863aa5cf8ef"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_flowmanagement",
+                      "operationId": "StartFlow",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_flowmanagement"
+                    },
+                    "parameters": {
+                      "environmentName": "@parameters('Preproduction Environment ID (erf_PreproductionEnvironmentID)')",
+                      "flowName": "@items('ForEach_Inactive_Flow')?['admin_flowidstring']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "37d2c826-0f9b-4273-8054-dae88da9a40d"
+              },
+              "type": "Scope"
+            },
+            "Catch": {
+              "actions": {},
+              "runAfter": {
+                "Try": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "58bfe5a8-a615-4995-8c32-7397cd2cc2ad"
+              },
+              "type": "Scope"
+            }
+          },
+          "runAfter": {
+            "Get_Stopped_CloudFlows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "96b3ea7f-df3a-4784-8553-6b11d6d37e26"
+          },
+          "type": "Foreach"
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{66dbebad-10e4-4eb2-b71c-15c1557e20ef}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{b07c7117-d750-4f96-8931-5f050dd64cf1}" IsUserDefined="1" name="tab_main">
+          <labels>
+            <label description="Main" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{647184ca-1f72-4c84-ad9a-9045ad9fdef2}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{245210b5-e7b8-41f9-87e5-c39d9346526a}">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="erf_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="erf_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{012fd6e8-e3b5-4f22-b568-5591935940b1}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Cloud Flow" languagecode="1033" />
+                        </labels>
+                        <control id="erf_cloudflowid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="erf_cloudflowid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6fd906e7-78e8-4010-93e1-56d52b504354}" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell locklevel="0" id="{d1caafd0-8ced-4aab-b3e8-7bea1cbeaa34}" rowspan="4" colspan="1" auto="false">
+                        <labels>
+                          <label description="Cloud Flow Execution" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_cloudflowexecution" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>cat_cloudflowruns</TargetEntityType>
+                            <ViewId>{777E9658-FAD5-479F-A7B9-5B40B9E2B3E1}</ViewId>
+                            <ViewIds>{777E9658-FAD5-479F-A7B9-5B40B9E2B3E1}</ViewIds>
+                            <RelationshipName>erf_CloudFlowIncident_erf_CloudFlowIncide</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_history" id="8d0d7a63-887b-4bc5-9ce0-5c6d4b728a48" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" visible="true">
+          <labels>
+            <label description="History" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="Section_history" id="ec79f6a9-cf77-4e4e-9023-f5533aa1fa94" IsUserDefined="0" locklevel="0" showlabel="false" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Sección del histórico" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{7dd249cf-57ec-4bce-badb-2c89abf4a50c}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Created On" languagecode="1033" />
+                        </labels>
+                        <control id="createdon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="createdon" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a83d5046-c4a9-44f3-9efa-61b3bc291093}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Modified On" languagecode="1033" />
+                        </labels>
+                        <control id="modifiedon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="modifiedon" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{8202197d-71a4-42ff-85d8-0bba2b08ea54}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{86882a97-1344-47fc-9b05-1ff623b8d9fc}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{1559da7f-facd-4ec6-8ae6-162dd8ba0eb7}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{c021a1cf-8cec-441b-a57a-59d71b582d76}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{cdf78b1e-5fff-4aef-abc8-adca94f074c0}" locklevel="0" colspan="1" rowspan="1">
+              <labels>
+                <label description="Maker" languagecode="1033" />
+              </labels>
+              <control id="header_erf_makerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="erf_makerid" disabled="false" />
+            </cell>
+            <cell id="{958a5e28-ff88-41eb-93d2-c4279e539610}" locklevel="0" colspan="1" rowspan="1">
+              <labels>
+                <label description="Status" languagecode="1033" />
+              </labels>
+              <control id="header_statecode" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+            </cell>
+            <cell id="{f7ecb1ce-0350-49f1-a34d-143aabb9e0e8}" locklevel="0" colspan="1" rowspan="1">
+              <labels>
+                <label description="Status Reason" languagecode="1033" />
+              </labels>
+              <control id="header_statuscode" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="statuscode" disabled="false" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{18a078ef-c557-4d93-b81f-bf1c5a3d99f6}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{ec6077ba-2983-43dd-91d8-84c8b36600dd}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{8e5a1b28-2cf7-44c3-b6eb-686e9501312c}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{bd541f90-e886-46ca-8e46-5570e98c00cf}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

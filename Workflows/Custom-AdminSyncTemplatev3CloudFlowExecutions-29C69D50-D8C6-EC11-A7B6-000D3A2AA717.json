@@ -1,0 +1,440 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_sharedcommondataserviceforapps_98924"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_webcontents": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "erf_CustomCoEPowerAutomateAPI"
+        },
+        "api": {
+          "name": "shared_webcontents"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        }
+      },
+      "triggers": {
+        "Periodicidad": {
+          "recurrence": {
+            "frequency": "Hour",
+            "interval": 3
+          },
+          "metadata": {
+            "operationMetadataId": "ef3dd117-cddc-43ad-8ac0-af9ef78b02fd"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "Get_flows": {
+          "runAfter": {
+            "ForEachExistingExecution": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7faa328a-d69c-4945-b0f2-d82a0b0d9473"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "admin_flows",
+              "$select": "admin_flowenvironmentid,admin_flowidstring,admin_flowid,_admin_flowenvironment_value,_ownerid_value",
+              "$filter": "(admin_flowdeleted eq false and erf_monitoringexecution eq true)"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "ForEachFlow": {
+          "foreach": "@outputs('Get_flows')?['body/value']",
+          "actions": {
+            "SkipCurrentFlowExecution": {
+              "actions": {
+                "GetFlowExecution": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "e2b6c9a1-9a01-4364-ae72-06c98652fa53"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_webcontents",
+                      "operationId": "InvokeHttp",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_webcontents"
+                    },
+                    "parameters": {
+                      "request/method": "GET",
+                      "request/url": "https://emea.api.flow.microsoft.com/providers/Microsoft.ProcessSimple/environments/@{items('ForEachFlow')?['admin_flowenvironmentid']}/flows/@{items('ForEachFlow')?['admin_flowidstring']}/runs?api-version=2016-11-01"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Parse_JSON_of_execution": {
+                  "runAfter": {
+                    "GetFlowExecution": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "9529762b-1784-410b-ab17-ec68441c5fb0"
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": "@body('GetFlowExecution')",
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "properties": {
+                                "type": "object",
+                                "properties": {
+                                  "startTime": {
+                                    "type": "string"
+                                  },
+                                  "endTime": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "correlation": {
+                                    "type": "object",
+                                    "properties": {
+                                      "clientTrackingId": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "trigger": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "inputsLink": {
+                                        "type": "object",
+                                        "properties": {
+                                          "uri": {
+                                            "type": "string"
+                                          },
+                                          "contentVersion": {
+                                            "type": "string"
+                                          },
+                                          "contentSize": {
+                                            "type": "integer"
+                                          },
+                                          "contentHash": {
+                                            "type": "object",
+                                            "properties": {
+                                              "algorithm": {
+                                                "type": "string"
+                                              },
+                                              "value": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "outputsLink": {
+                                        "type": "object",
+                                        "properties": {
+                                          "uri": {
+                                            "type": "string"
+                                          },
+                                          "contentVersion": {
+                                            "type": "string"
+                                          },
+                                          "contentSize": {
+                                            "type": "integer"
+                                          },
+                                          "contentHash": {
+                                            "type": "object",
+                                            "properties": {
+                                              "algorithm": {
+                                                "type": "string"
+                                              },
+                                              "value": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "startTime": {
+                                        "type": "string"
+                                      },
+                                      "endTime": {
+                                        "type": "string"
+                                      },
+                                      "originHistoryName": {
+                                        "type": "string"
+                                      },
+                                      "correlation": {
+                                        "type": "object",
+                                        "properties": {
+                                          "clientTrackingId": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "status": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "id",
+                              "type",
+                              "properties"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "ForEachExecution": {
+                  "foreach": "@body('Parse_JSON_of_execution')?['value']",
+                  "actions": {
+                    "IfThisExecutionNotExist": {
+                      "actions": {
+                        "SecondCheckIfCloudFlowExist": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "dc732457-954c-44ed-a8e1-93a677edee39"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "ListRecords",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "cat_cloudflowrunses",
+                              "$select": "cat_cloudflowrunsid",
+                              "$filter": "(cat_name eq '@{items('ForEachExecution')?['name']}')",
+                              "$top": 1
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "IfSecondCheckIsNull": {
+                          "actions": {
+                            "Create_New_Flow_Run": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "1112d143-6306-4321-a9cd-399a1b087a91"
+                              },
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "connectionName": "shared_commondataserviceforapps",
+                                  "operationId": "CreateRecord",
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                },
+                                "parameters": {
+                                  "entityName": "cat_cloudflowrunses",
+                                  "item/cat_name": "@items('ForEachExecution')?['name']",
+                                  "item/cat_endtime": "@if(equals(items('ForEachExecution')?['properties']?['status'], 'Running'),null, formatDateTime(items('ForEachExecution')?['properties']?['endTime']))",
+                                  "item/cat_Environment@odata.bind": "/admin_environments(@{items('ForEachFlow')?['_admin_flowenvironment_value']})",
+                                  "item/erf_executionurl": "@{parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)')}@{items('ForEachFlow')?['admin_flowenvironmentid']}/flows/@{items('ForEachFlow')?['admin_flowidstring']}/runs/@{items('ForEachExecution')?['name']}",
+                                  "item/cat_Flow@odata.bind": "/admin_flows(@{items('ForEachFlow')?['admin_flowid']})",
+                                  "item/erf_flowexecutiondescription": "@if(equals(items('ForEachExecution')?['properties']?['status'],'Failed'),items('ForEachExecution')?['properties']?['error']?['message'],null)",
+                                  "item/erf_notified": false,
+                                  "item/ownerid@odata.bind": "/systemusers(@{items('ForEachFlow')?['_ownerid_value']})",
+                                  "item/cat_starttime": "@formatDateTime(items('ForEachExecution')?['properties']?['startTime'])",
+                                  "item/cat_status": "@items('ForEachExecution')?['properties']?['status']"
+                                },
+                                "authentication": "@parameters('$authentication')"
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "SecondCheckIfCloudFlowExist": [
+                              "Succeeded"
+                            ]
+                          },
+                          "expression": {
+                            "equals": [
+                              "@first(outputs('SecondCheckIfCloudFlowExist')?['body/value'])",
+                              "@null"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "e55f3e83-0e5b-461d-9a50-6f7d395a9fd7"
+                          },
+                          "type": "If"
+                        }
+                      },
+                      "runAfter": {},
+                      "expression": {
+                        "equals": [
+                          "@contains(variables('Last5000ExecutionsIds'),items('ForEachExecution')?['name'])",
+                          "@false"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "90425b89-59fc-4e7c-b426-74d2bdd54df3"
+                      },
+                      "type": "If"
+                    }
+                  },
+                  "runAfter": {
+                    "Parse_JSON_of_execution": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "b832c310-0356-4323-9d1c-38d0389db7c4"
+                  },
+                  "type": "Foreach"
+                }
+              },
+              "runAfter": {},
+              "expression": {
+                "not": {
+                  "equals": [
+                    "@items('ForEachFlow')?['admin_flowidstring']",
+                    "@string('e5bc7bfe-f775-4624-ba44-d12cc84cff08')"
+                  ]
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "ae5552b0-241c-4b50-a301-0fcfe5bf9c77"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Get_flows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "d3aacf84-1b42-4c8e-8e7b-2f99a7e5d6ad"
+          },
+          "type": "Foreach"
+        },
+        "GetLast500Executions": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "285fe9fc-408d-450c-99f8-149df1925c6b"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cat_cloudflowrunses",
+              "$select": "cat_name",
+              "$orderby": "createdon desc",
+              "$top": 500
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Initialize_Last500Executions": {
+          "runAfter": {
+            "GetLast500Executions": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7e179dd6-6546-41f2-80ad-8b6d0dedd096"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Last5000ExecutionsIds",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "ForEachExistingExecution": {
+          "foreach": "@outputs('GetLast500Executions')?['body/value']",
+          "actions": {
+            "Append_to_array_variable": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "9b9a16df-3e20-4087-8b61-7d8830a0a65a"
+              },
+              "type": "AppendToArrayVariable",
+              "inputs": {
+                "name": "Last5000ExecutionsIds",
+                "value": "@items('ForEachExistingExecution')?['cat_name']"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_Last500Executions": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "cd2bcf96-a975-4d7f-ac58-65f527eb91ed"
+          },
+          "type": "Foreach"
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
