@@ -5,7 +5,7 @@ CloudFlow_coe is a complement for Microsoft Power Platform CoE starter kit that 
 ## How to install
 
 Install the managed solution included in the release's section in your coe environment. In the solution there is a unique reference conection with an http with azure ad connector
-**it's necessary that you must configure the connection http with azure ad with these parameters: **
+**it's necessary that you must configure the connection http with azure ad with these parameters:**
 
 Base Resource URL: https://emea.api.flow.microsoft.com/
 
