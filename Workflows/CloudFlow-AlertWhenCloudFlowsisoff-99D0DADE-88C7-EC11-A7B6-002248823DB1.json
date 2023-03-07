@@ -13,7 +13,7 @@
       "shared_office365": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "admin_CoECoreO365Outlook"
+          "connectionReferenceLogicalName": "erf_sharedoffice365_ab739"
         },
         "api": {
           "name": "shared_office365"
@@ -54,7 +54,7 @@
           "type": "String",
           "metadata": {
             "schemaName": "admin_PowerAutomateEnvironmentVariable",
-            "description": "Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+            "description": "REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
           }
         },
         "Production Environment ID (erf_ProductionEnvironmentID)": {
@@ -378,7 +378,7 @@
         }
       }
     },
-    "templateName": null
+    "templateName": ""
   },
   "schemaVersion": "1.0.0.0"
 }

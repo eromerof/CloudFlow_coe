@@ -11,3 +11,9 @@ Base Resource URL: https://emea.api.flow.microsoft.com/
 
 Azure AD Resource URI (Application ID URI): https://service.flow.microsoft.com/
 
+**it's necessary that you configure the production environment id variable**
+
+You must go to https://make.powerapps.com, select the environment that you want to receive notifications and you can find the environment id information in developer resources: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/view-download-developer-resources 
+
+
+

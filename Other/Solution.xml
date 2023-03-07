@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.23012.180" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.2.23015.198" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>CoECloudFlow</UniqueName>
     <LocalizedNames>
       <LocalizedName description="CoECloudFlow" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.21</Version>
+    <Version>1.0.0.25</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>eromerof</UniqueName>
@@ -82,8 +82,6 @@
       <RootComponent type="1" schemaName="admin_maker" behavior="1" />
       <RootComponent type="1" schemaName="cat_cloudflowruns" behavior="2" />
       <RootComponent type="1" schemaName="erf_cloudflowincident" behavior="0" />
-      <RootComponent type="29" id="{0bbfb872-78f0-ec11-bb3d-000d3a1d6053}" behavior="0" />
-      <RootComponent type="29" id="{1252914e-2172-ed11-9562-000d3a55f956}" behavior="0" />
       <RootComponent type="29" id="{29c69d50-d8c6-ec11-a7b6-000d3a2aa717}" behavior="0" />
       <RootComponent type="29" id="{99d0dade-88c7-ec11-a7b6-002248823db1}" behavior="0" />
       <RootComponent type="29" id="{dee7a603-8dc7-ec11-a7b6-002248823db1}" behavior="0" />
@@ -149,10 +147,6 @@
       </MissingDependency>
       <MissingDependency>
         <Required type="1" schemaName="admin_flow" displayName="Flow" solution="CenterofExcellenceCoreComponents (3.56)" />
-        <Dependent type="29" displayName="Cloud Flow - Force Activated flow in Preproduction Environment" id="{0bbfb872-78f0-ec11-bb3d-000d3a1d6053}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="1" schemaName="admin_flow" displayName="Flow" solution="CenterofExcellenceCoreComponents (3.56)" />
         <Dependent type="29" displayName="Custom - Admin | Sync Template v3 (CloudFlowExecutions)" id="{29c69d50-d8c6-ec11-a7b6-000d3a2aa717}" />
       </MissingDependency>
       <MissingDependency>
@@ -209,14 +203,6 @@
       </MissingDependency>
       <MissingDependency>
         <Required type="1" schemaName="coe_environmentcreationrequest" displayName="Environment Creation Request" solution="CenterofExcellenceCoreComponents (3.56)" />
-        <Dependent type="62" schemaName="admin_PowerPlatformAdminView" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="1" schemaName="erf_azurefunction" displayName="Azure Function" solution="Active" />
-        <Dependent type="62" schemaName="admin_PowerPlatformAdminView" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="1" schemaName="erf_ejecuciondeazurefunction" displayName="Ejecución de Azure Function" solution="Active" />
         <Dependent type="62" schemaName="admin_PowerPlatformAdminView" />
       </MissingDependency>
       <MissingDependency>
@@ -552,28 +538,12 @@
         <Dependent type="62" schemaName="admin_PowerPlatformAdminView" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="connectionreference" displayName="admin_CoECoreDataverse" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECoreDataverse" />
-        <Dependent type="29" displayName="Cloud Flow - Force Activated flow in Preproduction Environment" id="{0bbfb872-78f0-ec11-bb3d-000d3a1d6053}" />
-      </MissingDependency>
-      <MissingDependency>
         <Required type="connectionreference" displayName="admin_CoECoreDataverseEnvRequest" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECoreDataverseEnvRequest" />
         <Dependent type="29" displayName="Cloud Flow - Alert When Cloud Flows is off" id="{99d0dade-88c7-ec11-a7b6-002248823db1}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="connectionreference" displayName="admin_CoECoreDataverseEnvRequest" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECoreDataverseEnvRequest" />
         <Dependent type="29" displayName="Cloud Flow - Alert When Cloud Flow Fails" id="{dee7a603-8dc7-ec11-a7b6-002248823db1}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="admin_CoECoreO365Outlook" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECoreO365Outlook" />
-        <Dependent type="29" displayName="Cloud Flow - Alert When Cloud Flows is off" id="{99d0dade-88c7-ec11-a7b6-002248823db1}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="admin_CoECoreO365Outlook" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECoreO365Outlook" />
-        <Dependent type="29" displayName="Cloud Flow - Alert When Cloud Flow Fails" id="{dee7a603-8dc7-ec11-a7b6-002248823db1}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="admin_CoECorePowerAutomateManagement" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECorePowerAutomateManagement" />
-        <Dependent type="29" displayName="Cloud Flow - Force Activated flow in Preproduction Environment" id="{0bbfb872-78f0-ec11-bb3d-000d3a1d6053}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="connectionreference" displayName="admin_CoECorePowerAutomateManagement" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_CoECorePowerAutomateManagement" />
@@ -582,10 +552,6 @@
       <MissingDependency>
         <Required type="connectionreference" displayName="admin_sharedcommondataserviceforapps_98924" solution="CenterofExcellenceCoreComponents (3.56)" id.connectionreferencelogicalname="admin_sharedcommondataserviceforapps_98924" />
         <Dependent type="29" displayName="Custom - Admin | Sync Template v3 (CloudFlowExecutions)" id="{29c69d50-d8c6-ec11-a7b6-000d3a2aa717}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="erf_sharedcommondataserviceforapps_ec1e9" solution="Active" id.connectionreferencelogicalname="erf_sharedcommondataserviceforapps_ec1e9" />
-        <Dependent type="29" displayName="Cloud flow incident - Create Incident" id="{1252914e-2172-ed11-9562-000d3a55f956}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="EnvironmentVariableDefinition" displayName="admin_AdminMail" solution="CenterofExcellenceCoreComponents (3.56)" id.schemaname="admin_AdminMail" />

@@ -13,7 +13,7 @@
       "shared_office365": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "admin_CoECoreO365Outlook"
+          "connectionReferenceLogicalName": "erf_sharedoffice365_ab739"
         },
         "api": {
           "name": "shared_office365"
@@ -255,7 +255,7 @@
         }
       }
     },
-    "templateName": null
+    "templateName": ""
   },
   "schemaVersion": "1.0.0.0"
 }
